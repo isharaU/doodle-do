@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
+import TaskList from "./components/TaskList";
 
 function App() {
     const [task, setTask] = useState(""); 
     const [tasks, setTasks] = useState([]); 
-    const [editingIndex, setEditingIndex] = useState(null); // Track editing task
-    const [editedTask, setEditedTask] = useState(""); // Store edited text
+    const [editingIndex, setEditingIndex] = useState(null); 
+    const [editedTask, setEditedTask] = useState(""); 
 
     const addTask = () => {
         if (task.trim() === "") return;
@@ -32,7 +33,7 @@ function App() {
         const updatedTasks = [...tasks];
         updatedTasks[index].text = editedTask;
         setTasks(updatedTasks);
-        setEditingIndex(null); // Exit edit mode
+        setEditingIndex(null);
     };
 
     useEffect(() => {
@@ -61,36 +62,16 @@ function App() {
             />
             <button onClick={addTask}>Add</button>
 
-            <ul>
-                {tasks.map((t, index) => (
-                    <li key={index} style={{ 
-                        textDecoration: t.completed ? "line-through" : "none",
-                        cursor: "pointer"
-                    }}>
-                        {editingIndex === index ? (
-                            <>
-                                <input 
-                                    type="text" 
-                                    value={editedTask} 
-                                    onChange={(e) => setEditedTask(e.target.value)}
-                                />
-                                <button onClick={() => saveEditedTask(index)}>Save</button>
-                            </>
-                        ) : (
-                            <>
-                                <span 
-                                    onClick={() => toggleTask(index)} 
-                                    style={{ cursor: "pointer" }}
-                                >
-                                    {t.text}
-                                </span>
-                                <button onClick={() => startEditing(index)}>✏️ Edit</button>
-                                <button onClick={(e) => { e.stopPropagation(); deleteTask(index); }}>❌</button>
-                            </>
-                        )}
-                    </li>
-                ))}
-            </ul>
+            <TaskList 
+                tasks={tasks} 
+                toggleTask={toggleTask} 
+                startEditing={startEditing} 
+                deleteTask={deleteTask} 
+                editingIndex={editingIndex} 
+                editedTask={editedTask} 
+                setEditedTask={setEditedTask} 
+                saveEditedTask={saveEditedTask} 
+            />
         </div>
     );
 }
