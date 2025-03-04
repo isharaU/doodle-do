@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 function App() {
     const [task, setTask] = useState(""); 
     const [tasks, setTasks] = useState([]); 
-    const [editingIndex, setEditingIndex] = useState(null); // Track which task is being edited
+    const [editingIndex, setEditingIndex] = useState(null); // Track editing task
     const [editedTask, setEditedTask] = useState(""); // Store edited text
 
     const addTask = () => {
@@ -63,7 +63,10 @@ function App() {
 
             <ul>
                 {tasks.map((t, index) => (
-                    <li key={index} style={{ textDecoration: t.completed ? "line-through" : "none" }}>
+                    <li key={index} style={{ 
+                        textDecoration: t.completed ? "line-through" : "none",
+                        cursor: "pointer"
+                    }}>
                         {editingIndex === index ? (
                             <>
                                 <input 
