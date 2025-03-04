@@ -6,12 +6,18 @@ function App() {
 
     const addTask = () => {
         if (task.trim() === "") return;
-        setTasks([...tasks, task]); 
+        setTasks([...tasks, { text: task, completed: false }]); 
         setTask(""); 
     };
 
     const deleteTask = (index) => {
-        const updatedTasks = tasks.filter((_, i) => i !== index);
+        setTasks(tasks.filter((_, i) => i !== index));
+    };
+
+    const toggleTask = (index) => {
+        const updatedTasks = tasks.map((t, i) =>
+            i === index ? { ...t, completed: !t.completed } : t
+        );
         setTasks(updatedTasks);
     };
 
@@ -28,9 +34,16 @@ function App() {
 
             <ul>
                 {tasks.map((t, index) => (
-                    <li key={index}>
-                        {t} 
-                        <button onClick={() => deleteTask(index)}>❌</button>
+                    <li 
+                        key={index} 
+                        onClick={() => toggleTask(index)}
+                        style={{ 
+                            textDecoration: t.completed ? "line-through" : "none",
+                            cursor: "pointer"
+                        }}
+                    >
+                        {t.text} 
+                        <button onClick={(e) => { e.stopPropagation(); deleteTask(index); }}>❌</button>
                     </li>
                 ))}
             </ul>
