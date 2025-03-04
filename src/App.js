@@ -1,36 +1,41 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 
 function App() {
-  // state variables
-  const [task, setTask] = useState(''); // stores the input values
-  const [taskList, setTaskList] = useState([]); // stores the list of tasks
+    const [task, setTask] = useState(""); 
+    const [tasks, setTasks] = useState([]); 
 
-  // handle adding a task
-  const addTask = () => {
-    if (task.trim() === '') return;
-    setTaskList([...taskList, task]);
-    setTask('');
-  };
+    const addTask = () => {
+        if (task.trim() === "") return;
+        setTasks([...tasks, task]); 
+        setTask(""); 
+    };
 
-  const deleteTask = (index) => {
-    const newTaskList = taskList.filter((_, i) => i !== index);
-    setTaskList(newTaskList);
-  };
+    const deleteTask = (index) => {
+        const updatedTasks = tasks.filter((_, i) => i !== index);
+        setTasks(updatedTasks);
+    };
 
-  return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-      <h1>Task List</h1>
-      <input type="text" value={task} onChange={(e) => setTask(e.target.value)} />
-      <button onClick={addTask}>Add Task</button>
-      <ul>
-        {taskList.map((task, index) => (
-          <li key={index}>
-            {task}
-            <button onClick={() => deleteTask(index)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+    return (
+        <div style={{ textAlign: "center", marginTop: "50px" }}>
+            <h1>My To-Do List</h1>
+            <input 
+                type="text" 
+                placeholder="Enter a task..." 
+                value={task} 
+                onChange={(e) => setTask(e.target.value)}
+            />
+            <button onClick={addTask}>Add</button>
+
+            <ul>
+                {tasks.map((t, index) => (
+                    <li key={index}>
+                        {t} 
+                        <button onClick={() => deleteTask(index)}>❌</button>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
 }
+
 export default App;
