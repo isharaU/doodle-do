@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
     const [task, setTask] = useState(""); 
@@ -20,6 +20,20 @@ function App() {
         );
         setTasks(updatedTasks);
     };
+
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === "Enter") {
+                addTask();
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [task]);
 
     return (
         <div style={{ textAlign: "center", marginTop: "50px" }}>
