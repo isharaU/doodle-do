@@ -12,6 +12,11 @@ function App() {
     setTask('');
   };
 
+  const deleteTask = (index) => {
+    const newTaskList = taskList.filter((_, i) => i !== index);
+    setTaskList(newTaskList);
+  };
+
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
       <h1>Task List</h1>
@@ -19,7 +24,10 @@ function App() {
       <button onClick={addTask}>Add Task</button>
       <ul>
         {taskList.map((task, index) => (
-          <li key={index}>{task}</li>
+          <li key={index}>
+            {task}
+            <button onClick={() => deleteTask(index)}>Delete</button>
+          </li>
         ))}
       </ul>
     </div>
