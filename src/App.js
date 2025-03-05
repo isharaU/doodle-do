@@ -8,26 +8,26 @@ function App() {
         return savedTasks ? JSON.parse(savedTasks) : [];
     });
 
-    const [theme, setTheme] = useState(() => {
-        return localStorage.getItem("theme") || "light"; // Load theme from local storage
-    });
-
+    const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
     const [editingIndex, setEditingIndex] = useState(null);
     const [editedTask, setEditedTask] = useState("");
 
     const addTask = (taskText) => {
         if (taskText.trim() === "") return;
-        setTasks([...tasks, { text: taskText, completed: false }]);
+        setTasks((prevTasks) => sortTasks([...prevTasks, { text: taskText, completed: false }]));
     };
 
     const deleteTask = (index) => {
-        setTasks(tasks.filter((_, i) => i !== index));
+        setTasks((prevTasks) => sortTasks(prevTasks.filter((_, i) => i !== index)));
     };
 
     const toggleTask = (index) => {
-        setTasks(tasks.map((t, i) =>
-            i === index ? { ...t, completed: !t.completed } : t
-        ));
+        setTasks((prevTasks) => {
+            const updatedTasks = prevTasks.map((t, i) =>
+                i === index ? { ...t, completed: !t.completed } : t
+            );
+            return sortTasks(updatedTasks);
+        });
     };
 
     const startEditing = (index) => {
@@ -37,24 +37,30 @@ function App() {
 
     const saveEditedTask = (index) => {
         if (editedTask.trim() === "") return;
-        const updatedTasks = [...tasks];
-        updatedTasks[index].text = editedTask;
-        setTasks(updatedTasks);
+        setTasks((prevTasks) => {
+            const updatedTasks = [...prevTasks];
+            updatedTasks[index].text = editedTask;
+            return sortTasks(updatedTasks);
+        });
         setEditingIndex(null);
     };
 
-    // Save tasks to local storage whenever they change
+    // Sorting function: Keeps uncompleted tasks at the top
+    const sortTasks = (taskList) => {
+        return taskList.sort((a, b) => a.completed - b.completed);
+    };
+
+    // Save tasks to local storage
     useEffect(() => {
         localStorage.setItem("tasks", JSON.stringify(tasks));
     }, [tasks]);
 
-    // Save theme to local storage and apply it
+    // Save theme to local storage
     useEffect(() => {
         localStorage.setItem("theme", theme);
-        document.body.className = theme; // Apply theme to the body
+        document.body.className = theme;
     }, [theme]);
 
-    // Function to toggle theme
     const toggleTheme = () => {
         setTheme(theme === "light" ? "dark" : "light");
     };
