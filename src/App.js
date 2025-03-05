@@ -14,20 +14,19 @@ function App() {
 
     const addTask = (taskText) => {
         if (taskText.trim() === "") return;
-        setTasks((prevTasks) => sortTasks([...prevTasks, { text: taskText, completed: false }]));
+        setTasks((prevTasks) => [...prevTasks, { text: taskText, completed: false }]);
     };
 
     const deleteTask = (index) => {
-        setTasks((prevTasks) => sortTasks(prevTasks.filter((_, i) => i !== index)));
+        setTasks((prevTasks) => prevTasks.filter((_, i) => i !== index));
     };
 
     const toggleTask = (index) => {
-        setTasks((prevTasks) => {
-            const updatedTasks = prevTasks.map((t, i) =>
+        setTasks((prevTasks) =>
+            prevTasks.map((t, i) =>
                 i === index ? { ...t, completed: !t.completed } : t
-            );
-            return sortTasks(updatedTasks);
-        });
+            )
+        );
     };
 
     const startEditing = (index) => {
@@ -40,14 +39,9 @@ function App() {
         setTasks((prevTasks) => {
             const updatedTasks = [...prevTasks];
             updatedTasks[index].text = editedTask;
-            return sortTasks(updatedTasks);
+            return updatedTasks;
         });
         setEditingIndex(null);
-    };
-
-    // Sorting function: Keeps uncompleted tasks at the top
-    const sortTasks = (taskList) => {
-        return taskList.sort((a, b) => a.completed - b.completed);
     };
 
     // Save tasks to local storage
@@ -77,6 +71,7 @@ function App() {
 
             <TaskList 
                 tasks={tasks} 
+                setTasks={setTasks}  // Pass setTasks for reordering
                 toggleTask={toggleTask} 
                 startEditing={startEditing} 
                 deleteTask={deleteTask} 
