@@ -1,17 +1,23 @@
 import React from "react";
 import TaskItem from "./TaskItem";
-import { motion, AnimatePresence } from "framer-motion";
+import { Reorder, AnimatePresence } from "framer-motion";
 
-const TaskList = ({ tasks, toggleTask, startEditing, deleteTask, editingIndex, editedTask, setEditedTask, saveEditedTask }) => {
+const TaskList = ({ tasks, setTasks, toggleTask, startEditing, deleteTask, editingIndex, editedTask, setEditedTask, saveEditedTask }) => {
     return (
-        <ul style={{ listStyleType: "none", padding: 0 }}>
+        <Reorder.Group 
+            axis="y" 
+            values={tasks} 
+            onReorder={setTasks} 
+            style={{ listStyleType: "none", padding: 0 }}
+        >
             <AnimatePresence>
                 {tasks.map((task, index) => (
-                    <motion.li 
+                    <Reorder.Item 
                         key={task.text} 
-                        initial={{ opacity: 0, y: -20 }}  // Fade-in and slide-up effect
-                        animate={{ opacity: 1, y: 0 }}   // Smoothly appear
-                        exit={{ opacity: 0, x: -100 }}   // Slide out to the left when removed
+                        value={task} 
+                        initial={{ opacity: 0, y: -20 }}  
+                        animate={{ opacity: 1, y: 0 }}  
+                        exit={{ opacity: 0, x: -100 }}  
                         transition={{ duration: 0.3 }}
                     >
                         <TaskItem 
@@ -25,10 +31,10 @@ const TaskList = ({ tasks, toggleTask, startEditing, deleteTask, editingIndex, e
                             setEditedTask={setEditedTask} 
                             saveEditedTask={saveEditedTask} 
                         />
-                    </motion.li>
+                    </Reorder.Item>
                 ))}
             </AnimatePresence>
-        </ul>
+        </Reorder.Group>
     );
 };
 
