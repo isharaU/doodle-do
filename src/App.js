@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react";
 import TaskList from "./components/TaskList";
+import TaskInput from "./components/TaskInput";
 
 function App() {
-    const [task, setTask] = useState(""); 
-    const [tasks, setTasks] = useState([]); 
-    const [editingIndex, setEditingIndex] = useState(null); 
-    const [editedTask, setEditedTask] = useState(""); 
+    const [tasks, setTasks] = useState(() => {
+        const savedTasks = localStorage.getItem("tasks");
+        return savedTasks ? JSON.parse(savedTasks) : [];
+    });
+    const [editingIndex, setEditingIndex] = useState(null);
+    const [editedTask, setEditedTask] = useState("");
 
-    const addTask = () => {
-        if (task.trim() === "") return;
-        setTasks([...tasks, { text: task, completed: false }]); 
-        setTask(""); 
+    const addTask = (taskText) => {
+        if (taskText.trim() === "") return;
+        const newTasks = [...tasks, { text: taskText, completed: false }];
+        setTasks(newTasks);
     };
 
     const deleteTask = (index) => {
@@ -37,30 +40,14 @@ function App() {
     };
 
     useEffect(() => {
-        const handleKeyDown = (event) => {
-            if (event.key === "Enter") {
-                if (editingIndex !== null) {
-                    saveEditedTask(editingIndex);
-                } else {
-                    addTask();
-                }
-            }
-        };
-
-        window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [task, editedTask, editingIndex]); 
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+    }, [tasks]);
 
     return (
         <div style={{ textAlign: "center", marginTop: "50px" }}>
             <h1>My To-Do List</h1>
-            <input 
-                type="text" 
-                placeholder="Enter a task..." 
-                value={task} 
-                onChange={(e) => setTask(e.target.value)}
-            />
-            <button onClick={addTask}>Add</button>
+            
+            <TaskInput addTask={addTask} />
 
             <TaskList 
                 tasks={tasks} 
