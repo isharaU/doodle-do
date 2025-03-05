@@ -7,13 +7,17 @@ function App() {
         const savedTasks = localStorage.getItem("tasks");
         return savedTasks ? JSON.parse(savedTasks) : [];
     });
+
+    const [theme, setTheme] = useState(() => {
+        return localStorage.getItem("theme") || "light"; // Load theme from local storage
+    });
+
     const [editingIndex, setEditingIndex] = useState(null);
     const [editedTask, setEditedTask] = useState("");
 
     const addTask = (taskText) => {
         if (taskText.trim() === "") return;
-        const newTasks = [...tasks, { text: taskText, completed: false }];
-        setTasks(newTasks);
+        setTasks([...tasks, { text: taskText, completed: false }]);
     };
 
     const deleteTask = (index) => {
@@ -39,14 +43,30 @@ function App() {
         setEditingIndex(null);
     };
 
+    // Save tasks to local storage whenever they change
     useEffect(() => {
         localStorage.setItem("tasks", JSON.stringify(tasks));
     }, [tasks]);
 
+    // Save theme to local storage and apply it
+    useEffect(() => {
+        localStorage.setItem("theme", theme);
+        document.body.className = theme; // Apply theme to the body
+    }, [theme]);
+
+    // Function to toggle theme
+    const toggleTheme = () => {
+        setTheme(theme === "light" ? "dark" : "light");
+    };
+
     return (
-        <div style={{ textAlign: "center", marginTop: "50px" }}>
+        <div className={`app-container ${theme}`} style={{ textAlign: "center", marginTop: "50px" }}>
             <h1>My To-Do List</h1>
             
+            <button onClick={toggleTheme}>
+                {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
+            </button>
+
             <TaskInput addTask={addTask} />
 
             <TaskList 
