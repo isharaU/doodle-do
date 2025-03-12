@@ -8,13 +8,6 @@ A simple **To-Do List** built with **React.js** that supports:
 ✅ **Smooth Animations 🎨**  
 ✅ **Local Storage Persistence 💾**  
 
----
-
-## 🚀 **Live Demo**
-[🔗 Click here to view the deployed app](https://todo-app-react-showcase.vercel.app/)
-
----
-
 ## 📂 **Project Structure**
 
 ```
@@ -104,14 +97,6 @@ Want to improve this project? Fork the repo, create a new branch, and submit a *
 ## 📜 **License**
 This project is licensed under the MIT License - see the LICENSE file for details.
 
----
-
-## ✨ **Author**
-👨‍💻 Developed by **Alex Johnson**  
-📧 Contact: alex@jsdev-pro.com  
-🔗 GitHub: [@jsdev-pro](https://github.com/jsdev-pro)
-
----
 
 ## 🐛 **Bug Reporting**
 Found a bug? Please open an issue with a detailed description of the problem and steps to reproduce it.
@@ -125,6 +110,3 @@ Found a bug? Please open an issue with a detailed description of the problem and
 - User authentication
 - Cloud synchronization
 
----
-
-🔥 **Enjoy coding and happy hacking! 🚀**
